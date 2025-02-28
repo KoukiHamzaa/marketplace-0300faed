@@ -120,34 +120,29 @@ A marketplace platform integrating with Shipper for product cloning and order fu
   }
 }
 
-async function startAutoSync() {
-  console.log("Starting auto-sync process...");
+async function syncChanges() {
+  try {
+    const status = await git.status();
 
-  while (true) {
-    try {
-      const status = await git.status();
+    if (status.files.length > 0) {
+      // Update documentation.md with changes
+      const changes = status.files.map(f => `- ${f.path}: ${f.working_dir}`).join("\n");
+      fs.appendFileSync("documentation.md", `\n## Update ${new Date().toISOString()}\n${changes}\n`);
 
-      if (status.files.length > 0) {
-        // Update documentation.md with changes
-        const changes = status.files.map(f => `- ${f.path}: ${f.working_dir}`).join("\n");
-        fs.appendFileSync("documentation.md", `\n## Update ${new Date().toISOString()}\n${changes}\n`);
+      // Commit and push changes
+      await git.add(".");
+      const randomMessage = commitMessages[Math.floor(Math.random() * commitMessages.length)];
+      await git.commit(randomMessage);
+      await git.push("origin", "main");
 
-        // Commit and push changes
-        await git.add(".");
-        const randomMessage = commitMessages[Math.floor(Math.random() * commitMessages.length)];
-        await git.commit(randomMessage);
-        await git.push("origin", "main");
-
-        console.log(`Changes pushed: ${randomMessage}`);
-      }
-
-      // Wait for 10 seconds
-      await new Promise(resolve => setTimeout(resolve, 10000));
-    } catch (error) {
-      console.error("Error during auto-sync:", error);
-      // Wait before retrying
-      await new Promise(resolve => setTimeout(resolve, 5000));
+      console.log(`Changes pushed: ${randomMessage}`);
+      return true;
     }
+
+    return false;
+  } catch (error) {
+    console.error("Error during sync:", error);
+    return false;
   }
 }
 
@@ -165,9 +160,15 @@ async function main() {
     const repoUrl = await initializeGit(repo);
     console.log("Initialized git repository");
 
-    await startAutoSync();
+    // Perform a single sync after initialization
+    await syncChanges();
+    console.log("Initial sync completed");
+
+    // Exit successfully
+    process.exit(0);
   } catch (error) {
     console.error("Failed to set up GitHub sync:", error);
+    process.exit(1);
   }
 }
 
