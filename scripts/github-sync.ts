@@ -26,9 +26,8 @@ async function createRepository() {
     throw new Error("GitHub token not found. Please set the GITHUB_TOKEN environment variable.");
   }
 
-  const repoName = `marketplace-${uuidv4().slice(0, 8)}`;
-
   try {
+    const repoName = `marketplace-${uuidv4().slice(0, 8)}`;
     const { data } = await octokit.repos.createForAuthenticatedUser({
       name: repoName,
       auto_init: true,
@@ -36,14 +35,18 @@ async function createRepository() {
       description: "Marketplace platform with Shipper integration"
     });
 
-    return data.html_url;
+    return {
+      name: repoName,
+      url: data.html_url,
+      cloneUrl: data.clone_url
+    };
   } catch (error) {
     console.error("Failed to create repository:", error);
     throw error;
   }
 }
 
-async function initializeGit(repoUrl: string) {
+async function initializeGit(repo: { name: string, url: string, cloneUrl: string }) {
   try {
     // Initialize git if not already initialized
     if (!fs.existsSync(".git")) {
@@ -85,14 +88,20 @@ A marketplace platform integrating with Shipper for product cloning and order fu
 `);
     }
 
-    // Set up remote
+    // Set up remote with token authentication
+    const remoteUrl = repo.cloneUrl.replace('https://', `https://${GITHUB_TOKEN}@`);
     await git.removeRemote("origin").catch(() => {});
-    await git.addRemote("origin", repoUrl);
+    await git.addRemote("origin", remoteUrl);
 
     // Initial commit
     await git.add(".");
     await git.commit("Initial commit: Project setup");
-    await git.push("origin", "main", ["--force"]);
+
+    // Set main branch and push
+    await git.branch(['-M', 'main']);
+    await git.push(['-u', 'origin', 'main']);
+
+    return repo.url;
   } catch (error) {
     console.error("Failed to initialize git:", error);
     throw error;
@@ -138,10 +147,10 @@ async function main() {
   }
 
   try {
-    const repoUrl = await createRepository();
-    console.log("Created repository:", repoUrl);
+    const repo = await createRepository();
+    console.log("Created repository:", repo.url);
 
-    await initializeGit(repoUrl);
+    const repoUrl = await initializeGit(repo);
     console.log("Initialized git repository");
 
     await startAutoSync();
