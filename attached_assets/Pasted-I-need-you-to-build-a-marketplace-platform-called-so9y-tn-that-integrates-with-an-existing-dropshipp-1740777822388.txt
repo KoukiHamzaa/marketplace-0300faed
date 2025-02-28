@@ -1,0 +1,45 @@
+I need you to build a marketplace platform called so9y.tn that integrates with an existing dropshipping platform called Shipper. Here’s how it should work:
+
+1. Overview
+so9y.tn is a marketplace that clones products from Shipper via API and lists them as retail products. When a customer makes a purchase, so9y.tn sends the order information to either:
+
+Our internal customer service team for confirmation.
+Or Sellmax, an external confirmation center.
+After confirmation, so9y.tn sends the order to Shipper for fulfillment and delivery.
+
+2. Users & Roles
+Wholesale Suppliers (on Shipper) → Add their products with wholesale prices.
+Dropshippers (like us) → Sell these products at a retail price and handle marketing.
+Customers → Buy products on so9y.tn.
+Customer Service Team → Confirms orders if we choose internal confirmation.
+3. Features & API Integrations
+Product Cloning & Management
+Clone all products from Shipper using an API.
+Allow editing of cloned products (titles, descriptions, prices, etc.).
+Enable custom product creation (we can add products manually).
+Order Processing & Confirmation
+When a customer makes a purchase, send order details to:
+Our internal customer service team or
+Sellmax for confirmation.
+After confirmation, send the order to Shipper for fulfillment.
+Delivery & Tracking System
+Generate a tracking code for each order.
+Customers can track their orders step by step via a public tracking page.
+SMS Notifications
+Integrate with TunisieSMS API to send SMS notifications for each order update.
+Show the tracking code on the Thank You page and send it via SMS.
+4. Tech Stack & Requirements
+Full-stack development (Front-end + Back-end).
+API Integrations with:
+Shipper (for product cloning & order fulfillment).
+Sellmax (for order confirmation).
+TunisieSMS (for SMS notifications).
+Database to store product and order details.
+Hosting setup for deployment.
+5. Next Steps
+Start by:
+
+Writing a UML diagram to visualize the system.
+Documenting APIs & database structure.
+Building the back-end (handling product cloning, order processing, etc.).
+Developing the front-end (marketplace UI).
