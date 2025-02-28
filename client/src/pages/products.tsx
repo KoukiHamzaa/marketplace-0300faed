@@ -10,7 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { CheckboxItem } from "@/components/ui/checkbox";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Slider } from "@/components/ui/slider";
 import { useState } from "react";
 
@@ -38,7 +38,9 @@ export default function Products() {
   });
 
   // Get unique categories from products
-  const categories = [...new Set(products.map(p => p.metadata?.category || "Uncategorized"))];
+  const categories = Array.from(
+    new Set(products.map(p => p.metadata?.category || "Uncategorized"))
+  );
 
   // Get price range
   const priceRange = products.reduce((acc, product) => ({
@@ -141,15 +143,20 @@ export default function Products() {
               <Separator />
 
               {/* In Stock Only */}
-              <div>
-                <CheckboxItem
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="in-stock"
                   checked={filters.inStock}
-                  onCheckedChange={(checked) => 
-                    setFilters(f => ({ ...f, inStock: checked as boolean }))
+                  onCheckedChange={(checked: boolean) => 
+                    setFilters(f => ({ ...f, inStock: checked }))
                   }
+                />
+                <label
+                  htmlFor="in-stock"
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 >
                   In Stock Only
-                </CheckboxItem>
+                </label>
               </div>
             </CardContent>
           </Card>
