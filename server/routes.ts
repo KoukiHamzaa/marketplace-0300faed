@@ -2,11 +2,22 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertProductSchema, insertOrderSchema, insertOrderItemSchema } from "@shared/schema";
+import { fetchDummyProducts } from "@/lib/api";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Products
   app.get("/api/products", async (_req, res) => {
-    const products = await storage.getProducts();
+    let products = await storage.getProducts();
+
+    // If no products in storage, fetch from DummyJSON
+    if (products.length === 0) {
+      products = await fetchDummyProducts();
+      // Store dummy products in our storage
+      for (const product of products) {
+        await storage.createProduct(product);
+      }
+    }
+
     res.json(products);
   });
 
@@ -44,7 +55,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/orders/:id", async (req, res) => {
     const order = await storage.getOrder(Number(req.params.id));
     if (!order) return res.status(404).json({ message: "Order not found" });
-    
+
     const items = await storage.getOrderItems(order.id);
     res.json({ ...order, items });
   });
@@ -55,7 +66,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       return res.status(400).json({ message: "Invalid order data" });
     }
     const order = await storage.createOrder(parsed.data);
-    
+
     // Create order items
     if (Array.isArray(req.body.items)) {
       for (const item of req.body.items) {
@@ -68,7 +79,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
       }
     }
-    
+
     res.status(201).json(order);
   });
 

@@ -1,4 +1,5 @@
 import axios from "axios";
+import { type Product } from "@shared/schema";
 
 // Initialize Shipper API client
 export const shipperApi = axios.create({
@@ -23,6 +24,37 @@ export const sellmaxApi = axios.create({
     Authorization: `Bearer ${process.env.SELLMAX_API_KEY}`
   }
 });
+
+// Initialize DummyJSON API client
+export const dummyApi = axios.create({
+  baseURL: "https://dummyjson.com"
+});
+
+export const fetchDummyProducts = async (): Promise<Product[]> => {
+  try {
+    const { data } = await dummyApi.get("/products");
+    return data.products.map((product: any) => ({
+      id: product.id,
+      title: product.title,
+      description: product.description,
+      price: product.price,
+      wholesalePrice: Math.round(product.price * 0.7), // 30% less for wholesale
+      images: [product.thumbnail, ...product.images],
+      inStock: product.stock > 0,
+      shipperId: null,
+      metadata: {
+        brand: product.brand,
+        category: product.category,
+        rating: product.rating,
+        stock: product.stock,
+        discountPercentage: product.discountPercentage
+      }
+    }));
+  } catch (error) {
+    console.error("Failed to fetch dummy products:", error);
+    return [];
+  }
+};
 
 export const sendSmsNotification = async (phoneNumber: string, message: string) => {
   try {
