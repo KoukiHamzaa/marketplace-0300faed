@@ -8,16 +8,16 @@ export function Navbar() {
   return (
     <nav className="border-b">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-        <Link href="/">
-          <a className="text-2xl font-bold">so9y.tn</a>
-        </Link>
+        <div className="text-2xl font-bold">
+          <Link href="/">so9y.tn</Link>
+        </div>
 
         <div className="hidden md:flex items-center space-x-6">
           {NAV_ITEMS.map((item) => (
             <Link key={item.href} href={item.href}>
-              <a className="text-sm font-medium transition-colors hover:text-primary">
+              <Button variant="link" className="text-sm font-medium">
                 {item.label}
-              </a>
+              </Button>
             </Link>
           ))}
         </div>
