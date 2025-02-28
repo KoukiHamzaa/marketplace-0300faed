@@ -1,0 +1,66 @@
+Styling Instructions for so9y.tn (Amazon-Style UI)
+
+1. General Design Approach
+The UI should closely resemble Amazon.com in layout, spacing, and styling.
+Use a clean, modern, and responsive design.
+Prioritize user-friendly navigation with well-organized sections.
+Follow Amazon’s color scheme (white background, black text, blue links, yellow highlights).
+2. Home Page (Landing Page)
+Header & Navigation (Sticky Navbar):
+
+Include a top bar with a logo, search bar, and cart icon.
+Show categories dropdown on the left, similar to Amazon.
+Add a login/account section with a dropdown for user options.
+Display language and currency selector.
+Hero Section (Main Banner):
+
+Use a full-width banner with high-quality images.
+Add dynamic sliders for promotions and featured products.
+Product Listings & Recommendations:
+
+Show "Featured Products", "Best Sellers", and "Recommended for You" sections.
+Display products in grid format, each with:
+Product image
+Title
+Price
+Ratings (stars)
+"Add to Cart" button
+Deals & Discounts:
+
+Include a “Today’s Deals” section with time-limited offers.
+Footer:
+
+Structured in columns, with:
+Customer Service (FAQs, Contact, Returns)
+Company Info (About Us, Terms & Conditions)
+Social Media Links
+Newsletter Subscription Box
+3. Product Page
+Large product image gallery with zoom-in feature.
+Product title, price, and stock availability clearly visible.
+Buy Now & Add to Cart buttons with bold styling.
+Customer Reviews Section (star ratings, user comments).
+Recommended & Similar Products Section below.
+4. Cart Page
+Itemized product list with images, names, prices, and quantities.
+Total price breakdown (subtotal, shipping, tax, grand total).
+Proceed to Checkout button in a bold, attention-grabbing style.
+5. Checkout Page
+Step-by-step checkout process (Shipping, Payment, Review Order).
+Clean, minimalistic form design for input fields.
+Show estimated delivery date dynamically.
+6. Order Tracking Page
+Display order status timeline (Order Placed → Confirmed → Shipped → Out for Delivery → Delivered).
+Show the tracking number and carrier details.
+7. Mobile Responsiveness
+The entire UI must be fully responsive.
+Use a mobile-friendly navigation bar with a collapsible menu.
+Ensure buttons, links, and images are optimized for touch interactions.
+8. Styling & Fonts
+Use Amazon-like font styles (bold titles, clear body text).
+Ensure a consistent color scheme throughout the site.
+Buttons should have hover effects to improve user experience.
+Next Steps:
+Implement Amazon-style UI design for all pages.
+Ensure full responsiveness across devices.
+Test and refine UI elements for a seamless experience.
