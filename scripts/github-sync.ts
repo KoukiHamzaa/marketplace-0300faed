@@ -93,13 +93,25 @@ A marketplace platform integrating with Shipper for product cloning and order fu
     await git.removeRemote("origin").catch(() => {});
     await git.addRemote("origin", remoteUrl);
 
-    // Initial commit
+    // Fetch the remote repository to get the initial commit
+    await git.fetch("origin");
+
+    // Set main as the default branch
+    await git.branch(['-M', 'main']);
+
+    try {
+      // Try to pull the remote changes first
+      await git.pull("origin", "main", { "--allow-unrelated-histories": null });
+    } catch (error) {
+      console.log("Initial pull failed, continuing with push...");
+    }
+
+    // Stage and commit all files
     await git.add(".");
     await git.commit("Initial commit: Project setup");
 
-    // Set main branch and push
-    await git.branch(['-M', 'main']);
-    await git.push(['-u', 'origin', 'main']);
+    // Force push to override any remote state
+    await git.push(['-u', 'origin', 'main', '--force']);
 
     return repo.url;
   } catch (error) {
